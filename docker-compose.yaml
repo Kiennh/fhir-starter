@@ -1,0 +1,35 @@
+version: '3.1'
+
+services:
+  ig:
+    image: nginx:1.19.10-alpine
+    volumes:
+    - ./ig:/usr/share/nginx/html
+    ports:
+    - "8081:80"
+
+  web:
+    build: .
+    volumes:
+    - ./configs:/configs
+    ports:
+      - "3003:8080"
+    environment:
+      spring.config.location: /configs/kl.yaml
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    ports:
+      - "3309:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: 123312##
+      MYSQL_DATABASE: hapi
+      MYSQL_PASSWORD: hapi
+      MYSQL_USER: hapi
+    volumes:
+      - ./data/mysql:/var/lib/mysql
+      #- ./configs/my.cnf:/etc/mysql/my.cnf

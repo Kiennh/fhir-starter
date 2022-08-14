@@ -1,0 +1,60 @@
+spring:
+  datasource:
+    #url: 'jdbc:h2:mem:test_mem'
+    url: "jdbc:mysql://db:3306/hapi?useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true&useLegacyDatetimeCode=false&serverTimezone=UTC"
+    username: hapi
+    password: hapi
+    driverClassName: com.mysql.cj.jdbc.Driver
+    max-active: 15
+
+  main:
+    allow-circular-references: true
+    #allow-bean-definition-overriding: true
+  flyway:
+    enabled: false
+    check-location: false
+    baselineOnMigrate: true
+  batch:
+    job:
+      enabled: false
+
+hapi:
+  fhir:
+    fhir_version: R4
+    implementationguides:
+      - url: http://ig/snomed/package.tgz
+        name: snomed.path.org
+        version: 0.1.0-test
+      - url: http://ig/hiv-vn/package.tgz
+        name: openhie.vn.case-reporting.hiv
+        version: 0.1.0-test
+
+    enable_repository_validating_interceptor: true
+
+    supported_resource_types:
+      - Patient
+      - Observation
+      - StructureDefinition
+      - ValueSet
+      - CodeSystem
+      - NamingSystem
+      - Bundle
+      - CarePlan
+      - Condition
+      - Encounter
+      - Goal
+      - Binary
+      - Subscription
+
+    tester:
+      home:
+        name: Local Tester
+        server_address: "http://localhost:8080/fhir"
+        refuse_to_fetch_third_party_urls: false
+        fhir_version: R4
+
+      global:
+        name: Global Tester
+        server_address: "http://hapi.fhir.org/baseR4"
+        refuse_to_fetch_third_party_urls: false
+        fhir_version: R4
